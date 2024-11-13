@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora Científica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #1a2634, #2980b9);
+            padding: 10px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 1.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            padding: 10px 0;
+        }
+
+        .website-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            margin: 5px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .calculator {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            padding: 15px;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 10px;
+        }
+
+        #display {
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 1.5em;
+            text-align: right;
+            color: #2c3e50;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        button {
+            padding: 15px 8px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        button:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0.95);
+        }
+
+        .operator {
+            background: rgba(52, 152, 219, 0.5);
+        }
+
+        .equals {
+            background: rgba(46, 204, 113, 0.5);
+        }
+
+        .clear {
+            background: rgba(231, 76, 60, 0.5);
+        }
+
+        .function {
+            background: rgba(155, 89, 182, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <h1>CONSULTORIA EN INGENIERIA Y EFICIENCIA ENERGETICA</h1>
+    <a href="https://consultoria-ingenieria.com" class="website-link" target="_blank">consultoria-ingenieria.com</a>
+    <div class="calculator">
+        <input type="text" id="display" readonly>
+        <div class="buttons">
+            <button class="function" onclick="addFunction('sin')">sin</button>
+            <button class="function" onclick="addFunction('cos')">cos</button>
+            <button class="function" onclick="addFunction('tan')">tan</button>
+            <button class="function" onclick="addFunction('log')">log</button>
+            <button class="function" onclick="addFunction('ln')">ln</button>
+            
+            <button class="function" onclick="addFunction('sqrt')">√</button>
+            <button class="function" onclick="power()">x^y</button>
+            <button class="function" onclick="factorial()">!</button>
+            <button class="function" onclick="pi()">π</button>
+            <button class="function" onclick="e()">e</button>
+
+            <button onclick="addToDisplay('7')">7</button>
+            <button onclick="addToDisplay('8')">8</button>
+            <button onclick="addToDisplay('9')">9</button>
+            <button class="operator" onclick="addToDisplay('/')">/</button>
+            <button class="clear" onclick="clearMemory()">C</button>
+
+            <button onclick="addToDisplay('4')">4</button>
+            <button onclick="addToDisplay('5')">5</button>
+            <button onclick="addToDisplay('6')">6</button>
+            <button class="operator" onclick="addToDisplay('*')">×</button>
+            <button class="clear" onclick="backspace()">←</button>
+
+            <button onclick="addToDisplay('1')">1</button>
+            <button onclick="addToDisplay('2')">2</button>
+            <button onclick="addToDisplay('3')">3</button>
+            <button class="operator" onclick="addToDisplay('-')">-</button>
+            <button class="operator" onclick="addToDisplay('(')">(</button>
+
+            <button onclick="addToDisplay('0')">0</button>
+            <button onclick="addToDisplay('.')">.</button>
+            <button class="equals" onclick="calculate()">=</button>
+            <button class="operator" onclick="addToDisplay('+')">+</button>
+            <button class="operator" onclick="addToDisplay(')')">)</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let memory = 0;
+
+        function addToDisplay(value) {
+            display.value += value;
+        }
+
+        function addFunction(func) {
+            display.value += func + '(';
+        }
+
+        function clearMemory() {
+            display.value = '';
+            memory = 0;
+        }
+
+        function backspace() {
+            display.value = display.value.slice(0, -1);
+        }
+
+        function power() {
+            display.value += '^';
+        }
+
+        function factorial() {
+            try {
+                let num = parseInt(display.value);
+                let result = 1;
+                for(let i = 2; i <= num; i++) {
+                    result *= i;
+                }
+                display.value = result;
+            } catch(e) {
+                display.value = 'Error';
+            }
+        }
+
+        function pi() {
+            display.value += Math.PI;
+        }
+
+        function e() {
+            display.value += Math.E;
+        }
+
+        function calculate() {
+            try {
+                let expression = display.value;
+                
+                expression = expression.replace(/sin\(/g, 'Math.sin(');
+                expression = expression.replace(/cos\(/g, 'Math.cos(');
+                expression = expression.replace(/tan\(/g, 'Math.tan(');
+                expression = expression.replace(/log\(/g, 'Math.log10(');
+                expression = expression.replace(/ln\(/g, 'Math.log(');
+                expression = expression.replace(/sqrt\(/g, 'Math.sqrt(');
+                expression = expression.replace(/\^/g, '**');
+
+                let result = eval(expression);
+                result = Math.round(result * 100000000) / 100000000;
+                
+                display.value = result;
+            } catch(e) {
+                display.value = 'Error';
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            if (/[0-9\+\-\*\/$$$$\.]/.test(key)) {
+                addToDisplay(key);
+            } else if (key === 'Enter') {
+                calculate();
+            } else if (key === 'Backspace') {
+                backspace();
+            } else if (key === 'Escape') {
+                clearMemory();
+            }
+        });
+    </script>
+</body>
+</html>
